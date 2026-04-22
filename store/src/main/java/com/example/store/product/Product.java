@@ -1,6 +1,11 @@
 package com.example.store.product;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
@@ -14,7 +19,7 @@ public class Product {
     private String name;
 
     @Column(nullable = false)
-    private Integer price; //calculate price in cents to avoid floating point issues
+    private Double price; //calculate price in cents to avoid floating point issues
 
     @Column(length=1000)
     private String description;
@@ -28,7 +33,7 @@ public class Product {
     // Constructors
     public Product() {}
 
-    public Product(String name, Integer price, String description, String color, String type) {
+    public Product(String name, Double price, String description, String color, String type) {
         this.name = name;
         this.price = price;
         this.description = description;
@@ -54,11 +59,11 @@ public class Product {
         this.name = name;
     }
 
-    public Integer getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(Integer price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 
