@@ -1,11 +1,12 @@
 package com.example.store.order;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.store.product.Product;
 import com.example.store.product.ProductRepository;
-
-import java.util.List;
 
 @Service
 public class OrderService {
@@ -18,13 +19,25 @@ public class OrderService {
         this.productRepo = productRepo;
     }
 
+    public List<Order> getAll() {
+        return orderRepo.findAll();
+    }
+
+    @Transactional
     public Order createOrder(List<OrderItemRequest> itemsRequest) {
 
+        if (itemsRequest == null || itemsRequest.isEmpty()) {
+            throw new RuntimeException("Order must contain at least one item");
+        }
         Order order = new Order();
 
         double total = 0;
 
         for (OrderItemRequest itemReq : itemsRequest) {
+
+            if (itemReq.getQuantity() == null || itemReq.getQuantity() <= 0) {
+                throw new RuntimeException("Quantity must be greater than 0");
+            }
 
             Product product = productRepo.findById(itemReq.getProductId()).orElseThrow(() -> new RuntimeException("Product not found"));
 
