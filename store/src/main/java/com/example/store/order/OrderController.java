@@ -19,12 +19,12 @@ public class OrderController {
     }
 
     @PostMapping
-    public Order create(@RequestBody List<OrderItemRequest> items) {
+    public OrderResponse create(@RequestBody List<OrderItemRequest> items) {
         return service.createOrder(items);
     }
 
     @GetMapping
-    public List<Order> getAll() {
+    public List<OrderResponse> getAll() {
         return service.getAll();
     }
 }

@@ -42,6 +42,17 @@ public class Order {
     //     this.items = new ArrayList<>();
     // }
 
+    public void addItem(OrderItem item) {
+        items.add(item);
+        item.setOrder(this);
+    }
+
+    public void calculateTotal() {
+        this.total = items.stream()
+            .mapToDouble(i -> i.getPriceAtPurchase() * i.getQuantity())
+            .sum();
+    }
+
     //Getters and Setters
     public Long getId() {
         return id;

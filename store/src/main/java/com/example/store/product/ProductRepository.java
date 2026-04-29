@@ -1,10 +1,16 @@
 package com.example.store.product;
-//Database access layer for product Entity (abstraction)
-//Repository = generated implementation, not just abstraction
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    // JpaRepository already provides basic CRUD methods
+
+    // duplicate check (case insensitive)
+    boolean existsByNameIgnoreCaseAndColorIgnoreCase(String name, String color);
+
+    // filtering
+    Page<Product> findByNameContainingIgnoreCase(String name, Pageable pageable);
 }
