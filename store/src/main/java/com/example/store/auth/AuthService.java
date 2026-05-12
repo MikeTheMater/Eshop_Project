@@ -33,6 +33,7 @@ public class AuthService {
     }
 
     public String register(String username, String password) {
+       
         if (userRepo.findByUsername(username).isPresent()) {
             throw new RuntimeException("User already exists");
         }
@@ -40,6 +41,7 @@ public class AuthService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
+        user.setRole("USER");// default role
         userRepo.save(user);
 
         return jwtService.generateToken(username);
