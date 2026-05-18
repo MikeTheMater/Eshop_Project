@@ -29,7 +29,7 @@ public class AuthService {
             throw new RuntimeException("Invalid password");
         }
 
-        return jwtService.generateToken(username);
+        return jwtService.generateToken(username, user.getRole());
     }
 
     public String register(String username, String password) {
@@ -44,6 +44,6 @@ public class AuthService {
         user.setRole("USER");// default role
         userRepo.save(user);
 
-        return jwtService.generateToken(username);
+        return jwtService.generateToken(username, user.getRole());
     }
 }

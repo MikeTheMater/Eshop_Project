@@ -16,7 +16,7 @@ public class User {
     private Long id;
 
 
-     @Column(unique = true)
+    @Column(unique = true)
     private String username;
 
     @Column(nullable=false)
