@@ -1,0 +1,19 @@
+/* LoginPage.css */
+
+/* 
+  The global stylesheet sets `color: var(--text)` on :root which cascades 
+  into ::placeholder. We use !important here to override that cascade.
+*/
+.login-input::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+  opacity: 1 !important; /* Firefox ignores color without this */
+}
+
+/* Prevent browser autofill from flashing a yellow background */
+.login-input:-webkit-autofill,
+.login-input:-webkit-autofill:hover,
+.login-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #fff;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(255, 255, 255, 0.08) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}

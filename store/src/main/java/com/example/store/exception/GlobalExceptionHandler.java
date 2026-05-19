@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.NOT_FOUND)
                 .body(Map.of("error", ex.getMessage()));
     }
-    
+
     @ExceptionHandler(InvalidOrderException.class)
     public ResponseEntity<?> handleInvalidOrder(InvalidOrderException ex) {
         return ResponseEntity
@@ -33,20 +33,35 @@ public class GlobalExceptionHandler {
                 .body(Map.of("error", ex.getMessage()));
     }
 
+    // Handles: register with existing username
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<?> handleUserAlreadyExists(UserAlreadyExistsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)          // 409 — semantically correct for duplicates
+                .body(Map.of("error", ex.getMessage()));
+    }
+
+    // Handles: wrong password, user not found during login
+    // RuntimeException is kept for auth errors that don't need their own class yet
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<?> handleRuntime(RuntimeException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(Map.of("error", ex.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidation(MethodArgumentNotValidException ex) {
-
         Map<String, String> errors = new HashMap<>();
-
         ex.getBindingResult().getFieldErrors().forEach(error ->
             errors.put(error.getField(), error.getDefaultMessage())
         );
-
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(errors);
     }
-    
+
+    // Catch-all — only hits for truly unexpected errors now
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleGeneral(Exception ex) {
         ex.printStackTrace();
