@@ -19,10 +19,17 @@ public class OrderController {
     }
 
     @PostMapping
-    public OrderResponse create(@RequestBody List<OrderItemRequest> items) {
-        return service.createOrder(items);
+    public OrderResponse create(@RequestBody OrderRequest request) {
+        return service.createOrder(request);
     }
 
+    // Current user's orders only
+    @GetMapping("/my")
+    public List<OrderResponse> getMyOrders() {
+        return service.getMyOrders();
+    }
+
+    // All orders — will be admin-only in the next step
     @GetMapping
     public List<OrderResponse> getAll() {
         return service.getAll();

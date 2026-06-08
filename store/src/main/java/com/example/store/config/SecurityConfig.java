@@ -30,18 +30,12 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-
-        // Allow your React dev server — add more origins here when you deploy
         config.setAllowedOrigins(List.of(
-            "http://localhost:3000",
-            "http://localhost:5173"  // Vite's default port, just in case
+            "http://localhost:8081",
+            "http://localhost:5173"
         ));
-
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-        // Allow the Authorization header so the JWT gets through
         config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-
         config.setAllowCredentials(true);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -58,7 +52,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
-            .cors(cors -> cors.configurationSource(corsConfigurationSource()))  // ← wired up properly now
+            .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
@@ -70,8 +64,8 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/api/products/**").permitAll()
-                .requestMatchers("/api/orders/**").hasRole("USER")
-                // .anyRequest().authenticated()
+                .requestMatchers("/api/addresses/**").hasAuthority("ROLE_USER")
+                .requestMatchers("/api/orders/**").hasAuthority("ROLE_USER")
             )
             .httpBasic(h -> h.disable())
             .addFilterBefore(

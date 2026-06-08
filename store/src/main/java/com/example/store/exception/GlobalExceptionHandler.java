@@ -41,12 +41,18 @@ public class GlobalExceptionHandler {
                 .body(Map.of("error", ex.getMessage()));
     }
 
-    // Handles: wrong password, user not found during login
-    // RuntimeException is kept for auth errors that don't need their own class yet
+    @ExceptionHandler(org.hibernate.LazyInitializationException.class)
+    public ResponseEntity<?> handleLazyInit(Exception ex) {
+        ex.printStackTrace();
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(Map.of("error", "Internal server error"));
+    }
+
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<?> handleRuntime(RuntimeException ex) {
         return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED)
+                .status(HttpStatus.BAD_REQUEST)  // ← was UNAUTHORIZED, caused confusion
                 .body(Map.of("error", ex.getMessage()));
     }
 
